@@ -22,6 +22,13 @@ class CharactersViewController: UIViewController {
         enum API {
             static let delay = 3.0
         }
+        enum Indicator {
+            static let height = 50.0
+            static let offset = 110.0
+        }
+        enum Pages {
+            static let amount = 42
+        }
     }
 
     private enum MainSection: Int, CaseIterable {
@@ -106,11 +113,15 @@ class CharactersViewController: UIViewController {
                 )
                 self.data.append(newCharacter)
                 self.collectionView.reloadData()
-                self.activityIndicatorView.stopAnimating()
-                self.activityIndicatorView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 110, width: UIScreen.main.bounds.width, height: 50)
-                self.activityIndicatorView.style = .medium
+                self.stopIndicator()
             }
         }
+    }
+    
+    private func stopIndicator() {
+        activityIndicatorView.stopAnimating()
+        activityIndicatorView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - Constant.Indicator.offset, width: UIScreen.main.bounds.width, height: Constant.Indicator.height)
+        activityIndicatorView.style = .medium
     }
     
     private func configureUI() {
@@ -191,7 +202,7 @@ extension CharactersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == data.count - 1 && page <= 42 {
+        if indexPath.row == data.count - 1 && page <= Constant.Pages.amount {
             getCharacters(page: page)
             page += 1
         }
