@@ -30,7 +30,7 @@ final class CollectionCell: UICollectionViewCell {
             static let font = UIFont(name: "WubbaLubbaDubDubRegular", size: 20)
         }
         enum Colors {
-            static let labelBG = UIColor(named: "labelBG")
+            static let labelBG = UIColor(named: "labelBG")!
             static let stroke = UIColor(named: "strokeColor")
             static let foreground = UIColor(named: "foregroundColor")
         }
@@ -61,6 +61,8 @@ final class CollectionCell: UICollectionViewCell {
         imageView.layer.cornerRadius = Constant.ImageView.radius
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.borderColor = Constant.Colors.labelBG.cgColor
+        imageView.layer.borderWidth = 3.0
         return imageView
     }()
 
@@ -99,6 +101,10 @@ final class CollectionCell: UICollectionViewCell {
     private func configureUI() {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = Constant.ContentView.radius
+        contentView.layer.shadowColor = UIColor.white.cgColor
+        contentView.layer.shadowOpacity = 0.5
+        contentView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        contentView.layer.shadowRadius = 3.0
         
         [imageView, titleLabel].forEach() {
             contentView.addSubview($0)
