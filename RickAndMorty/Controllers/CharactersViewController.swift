@@ -47,6 +47,14 @@ class CharactersViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
+    
+    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.color = .white
+        return indicator
+    }()
 
     // MARK: - Lifecycle
 
@@ -67,6 +75,7 @@ class CharactersViewController: UIViewController {
     // MARK: - Methods
     
     private func getCharacters(page: Int) {
+        activityIndicatorView.startAnimating()
         DispatchQueue.main.asyncAfter(deadline: .now() + Constant.API.delay) {
             self.apiManager.getCharacters(page: page) { [weak self] characters in
                 guard let self else { return }
@@ -97,6 +106,9 @@ class CharactersViewController: UIViewController {
                 )
                 self.data.append(newCharacter)
                 self.collectionView.reloadData()
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 110, width: UIScreen.main.bounds.width, height: 50)
+                self.activityIndicatorView.style = .medium
             }
         }
     }
@@ -110,7 +122,9 @@ class CharactersViewController: UIViewController {
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
         
-        view.addSubview(collectionView)
+        [collectionView, activityIndicatorView].forEach() {
+            view.addSubview($0)
+        }
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
