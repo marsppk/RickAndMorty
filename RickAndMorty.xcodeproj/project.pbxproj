@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2D595FAB2AEA95C6005B6A18 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D595FAA2AEA95C6005B6A18 /* SettingsViewController.swift */; };
 		2D595FAE2AEAD49C005B6A18 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D595FAD2AEAD49C005B6A18 /* CollectionCell.swift */; };
-		2D595FB02AEAEF8E005B6A18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D595FAF2AEAEF8E005B6A18 /* Assets.xcassets */; };
 		2D595FBA2AEC0DC3005B6A18 /* WubbaLubbaDubDub.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D595FB92AEC0DC2005B6A18 /* WubbaLubbaDubDub.ttf */; };
 		2D595FBB2AEC0DC3005B6A18 /* WubbaLubbaDubDub.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D595FB92AEC0DC2005B6A18 /* WubbaLubbaDubDub.ttf */; };
 		2D595FBC2AEC0DC3005B6A18 /* WubbaLubbaDubDub.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D595FB92AEC0DC2005B6A18 /* WubbaLubbaDubDub.ttf */; };
@@ -35,6 +34,7 @@
 		2D5AD8B02AED29390054B83C /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5AD8AE2AED29390054B83C /* Character.swift */; };
 		2D5AD8B12AED29390054B83C /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5AD8AE2AED29390054B83C /* Character.swift */; };
 		2D5AD8B32AED485D0054B83C /* NavBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5AD8B22AED485D0054B83C /* NavBarAppearance.swift */; };
+		2D79C0802AF0089500933A80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D79C07F2AF0089500933A80 /* Assets.xcassets */; };
 		2D998B502AE9801700332345 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D998B4F2AE9801700332345 /* AppDelegate.swift */; };
 		2D998B522AE9801700332345 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D998B512AE9801700332345 /* SceneDelegate.swift */; };
 		2D998B542AE9801700332345 /* CharactersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D998B532AE9801700332345 /* CharactersViewController.swift */; };
@@ -67,7 +67,6 @@
 /* Begin PBXFileReference section */
 		2D595FAA2AEA95C6005B6A18 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		2D595FAD2AEAD49C005B6A18 /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
-		2D595FAF2AEAEF8E005B6A18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../.Trash/Assets.xcassets; sourceTree = "<group>"; };
 		2D595FB92AEC0DC2005B6A18 /* WubbaLubbaDubDub.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = WubbaLubbaDubDub.ttf; sourceTree = "<group>"; };
 		2D5AD8902AEC15360054B83C /* Walt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Walt.ttf; sourceTree = "<group>"; };
 		2D5AD8952AED20CC0054B83C /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		2D5AD8AA2AED24460054B83C /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		2D5AD8AE2AED29390054B83C /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		2D5AD8B22AED485D0054B83C /* NavBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAppearance.swift; sourceTree = "<group>"; };
+		2D79C07F2AF0089500933A80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = RickAndMorty/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		2D998B4C2AE9801700332345 /* RickAndMorty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMorty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D998B4F2AE9801700332345 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D998B512AE9801700332345 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -230,7 +230,7 @@
 				2D595FAC2AEAD484005B6A18 /* Cell */,
 				2D595FA92AEA9448005B6A18 /* TabBar */,
 				2D5AD8832AEC12470054B83C /* Fonts */,
-				2D595FAF2AEAEF8E005B6A18 /* Assets.xcassets */,
+				2D79C07F2AF0089500933A80 /* Assets.xcassets */,
 				2D998B5A2AE9801800332345 /* LaunchScreen.storyboard */,
 				2D998B5D2AE9801800332345 /* Info.plist */,
 			);
@@ -360,8 +360,8 @@
 			files = (
 				2D5AD8912AEC15360054B83C /* Walt.ttf in Resources */,
 				2D595FBA2AEC0DC3005B6A18 /* WubbaLubbaDubDub.ttf in Resources */,
-				2D595FB02AEAEF8E005B6A18 /* Assets.xcassets in Resources */,
 				2D998B5C2AE9801800332345 /* LaunchScreen.storyboard in Resources */,
+				2D79C0802AF0089500933A80 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

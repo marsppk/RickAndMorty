@@ -17,7 +17,7 @@ final class CollectionCell: UICollectionViewCell {
             static let trailing = 16.0
             static let radius = 8.0
             static let height = 40.0
-            static let width = -2
+            static let width = -3
             static let numberOfLines = 2
         }
         enum ContentView {
