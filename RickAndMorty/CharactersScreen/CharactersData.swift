@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 // MARK: - Result
+
 struct Character {
     let id: Int
     let name: String

@@ -38,6 +38,7 @@ class CharactersViewController: UIViewController {
     // MARK: - Properties
 
     private var data: [Character] = []
+    private var workItem: DispatchWorkItem?
     var apiManager = APIManager()
     var page = 1
 
@@ -75,21 +76,35 @@ class CharactersViewController: UIViewController {
         data = []
         page = 1
         collectionView.reloadData()
+        activityIndicatorView.style = .large
+        activityIndicatorView.center = view.center
         getCharacters(page: page)
         page += 1
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        workItem?.cancel()
     }
     
     // MARK: - Methods
     
     private func getCharacters(page: Int) {
         activityIndicatorView.startAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constant.API.delay) {
+        
+        workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            
             self.apiManager.getCharacters(page: page) { [weak self] characters in
-                guard let self else { return }
+                guard let self = self else { return }
+                
                 for character in characters {
-                    getImage(character: character)
+                    self.getImage(character: character)
                 }
             }
+        }
+        if let item = workItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Constant.API.delay, execute: item)
         }
     }
     
