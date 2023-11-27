@@ -20,7 +20,7 @@ class CharactersViewController: UIViewController {
             static let interitemSpacing = 4.0
         }
         enum API {
-            static let delay = 3.0
+            static let delay = 0.5
         }
         enum Indicator {
             static let height = 50.0
@@ -91,27 +91,29 @@ class CharactersViewController: UIViewController {
     
     private func getCharacters(page: Int) {
         activityIndicatorView.startAnimating()
-        
+
         workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
-            
+
             self.apiManager.getCharacters(page: page) { [weak self] characters in
                 guard let self = self else { return }
-                
-                for character in characters {
-                    self.getImage(character: character)
-                }
+                self.getImages(characters: characters)
             }
         }
+
         if let item = workItem {
             DispatchQueue.main.asyncAfter(deadline: .now() + Constant.API.delay, execute: item)
         }
     }
     
-    private func getImage(character: Result) {
-        self.apiManager.getImage(character: character) { [weak self] image in
-            guard let self else { return }
-            DispatchQueue.main.async {
+    private func getImages(characters: [NetworkingCharacter]) {
+        var fetchedImagesCount = 0
+        var newCharacters: [Character] = []
+        for character in characters {
+            self.apiManager.getImage(characterImage: character.image) { [weak self] imageData in
+                guard let self = self else { return }
+                fetchedImagesCount += 1
+
                 let newCharacter = Character(
                     id: character.id,
                     name: character.name,
@@ -121,14 +123,21 @@ class CharactersViewController: UIViewController {
                     gender: character.gender,
                     origin: character.origin,
                     location: character.location,
-                    image: UIImage(data: image),
+                    image: UIImage(data: imageData),
                     episode: character.episode,
                     url: character.url,
                     created: character.created
                 )
-                self.data.append(newCharacter)
-                self.collectionView.reloadData()
-                self.stopIndicator()
+                newCharacters.append(newCharacter)
+
+                if fetchedImagesCount == characters.count {
+                    self.data.append(contentsOf: newCharacters)
+                    self.data = self.data.sorted { $0.id < $1.id }
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                        self.stopIndicator()
+                    }
+                }
             }
         }
     }

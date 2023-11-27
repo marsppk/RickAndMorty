@@ -1,31 +1,25 @@
 //
-//  Result.swift
+//  Character.swift
 //  RickAndMorty
 //
 //  Created by Maria Slepneva on 28.10.2023.
 //
 
 import Foundation
+import UIKit
 
 // MARK: - Result
 
-struct Result: Codable {
+struct Character {
     let id: Int
     let name: String
     let status: Status
     let species: String
     let type: String
     let gender: Gender
-    let origin, location: Location
-    let image: String
+    let origin, location: CharacterLocation
+    let image: UIImage?
     let episode: [String]
     let url: String
     let created: String
-}
-
-enum Gender: String, Codable {
-    case female = "Female"
-    case male = "Male"
-    case unknown = "unknown"
-    case genderless = "Genderless"
 }
