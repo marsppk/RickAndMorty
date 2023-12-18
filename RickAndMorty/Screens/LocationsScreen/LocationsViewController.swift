@@ -25,7 +25,7 @@ class LocationsViewController: UIViewController {
     
     // MARK: - Subviews
     
-    private lazy var contentView = LocationsView()
+    private lazy var contentView = LocationsView(delegate: self)
 
     // MARK: - Lifecycle
     
@@ -60,6 +60,7 @@ class LocationsViewController: UIViewController {
         navigationItem.standardAppearance = navigationBarAppearance
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func bind() {
@@ -72,3 +73,8 @@ class LocationsViewController: UIViewController {
     }
 }
 
+extension LocationsViewController: LocationsViewDelegate {
+    func openModalScreen(item: LocationsDetailsViewController) {
+        navigationController?.pushViewController(item, animated: true)
+    }
+}

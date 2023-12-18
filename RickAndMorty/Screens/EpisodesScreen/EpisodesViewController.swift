@@ -55,51 +55,54 @@ class EpisodesViewController: UIViewController {
         navigationItem.standardAppearance = navigationBarAppearance
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
 
 // MARK: - EpisodesViewDelegate
 
 extension EpisodesViewController: EpisodesViewDelegate {
+    
+    func openModalScreen(item: EpisodesDetailsViewController) {
+        navigationController?.pushViewController(item, animated: true)
+    }
+    
     func getEpisodes() {
-        workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
-            for page in 1...3 {
-                var fetchedEpisodesCount = 0
-                self.apiManager.getEpisodes(page: page) { [weak self] episodes in
-                    guard let self = self else { return }
-                    for elem in episodes {
-                        let indexWithS = String(elem.episode.prefix(3))
-                        let indexWithoutS = Int(indexWithS.suffix(2))
-                        fetchedEpisodesCount += 1
-                        let new = Episode(
-                            id: elem.id,
-                            name: elem.name,
-                            airDate: elem.airDate,
-                            episode: elem.episode,
-                            characters: elem.characters,
-                            url: elem.url,
-                            created: elem.created
-                        )
-                        if let index = indexWithoutS {
-                            if self.data[index] != nil {
-                                self.data[index]?.append(new)
-                            }
-                            else {
-                                self.data[index] = [new]
-                            }
-                        }
-                    }
-                    if fetchedEpisodesCount == episodes.count && page == 3 {
-                        DispatchQueue.main.async {
-                            self.contentView.changeTableViewData(data: self.data)
+        let dispatchGroup = DispatchGroup()
+        var newData: [Int: [Episode]] = [:]
+        
+        for page in 1...3 {
+            dispatchGroup.enter()
+            self.apiManager.getEpisodes(page: page) { episodes in
+                for elem in episodes {
+                    let indexWithS = String(elem.episode.prefix(3))
+                    let indexWithoutS = Int(indexWithS.suffix(2))
+                    let newEpisode = Episode(
+                        id: elem.id,
+                        name: elem.name,
+                        airDate: elem.airDate,
+                        episode: elem.episode,
+                        characters: elem.characters,
+                        url: elem.url,
+                        created: elem.created
+                    )
+                    if let index = indexWithoutS {
+                        if newData[index] != nil {
+                            newData[index]?.append(newEpisode)
+                        } else {
+                            newData[index] = [newEpisode]
                         }
                     }
                 }
+                dispatchGroup.leave()
             }
         }
-        if let item = workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: item)
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.data = newData
+                self.contentView.changeTableViewData(data: self.data)
+            }
         }
     }
 }

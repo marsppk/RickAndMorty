@@ -9,6 +9,7 @@ import UIKit
 
 protocol EpisodesViewDelegate: AnyObject {
     func getEpisodes()
+    func openModalScreen(item: EpisodesDetailsViewController)
 }
 
 class EpisodesView: UIView {
@@ -16,15 +17,18 @@ class EpisodesView: UIView {
     // MARK: - Properties
     
     private weak var delegate: EpisodesViewDelegate?
+    private var data: [Int:[Episode]] = [:]
     
     // MARK: - Subviews
     
-    private let tableView: EpisodesTableView = {
-        let tableView = EpisodesTableView()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         return tableView
     }()
@@ -57,7 +61,7 @@ class EpisodesView: UIView {
     }
     
     func changeTableViewData(data: [Int:[Episode]]) {
-        tableView.updateData(data: data)
+        self.data = data
         tableView.reloadData()
         activityIndicatorView.stopAnimating()
     }
@@ -86,4 +90,61 @@ extension EpisodesView: EpisodesViewControllerDelegate {
         ])
     }
 }
+
+extension EpisodesView: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        70
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        40
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let headerLabel = UILabel()
+        headerLabel.font = UIFont(name: "TheSadTrain-Regular", size: 30)
+        headerLabel.text = "Season " + String(section + 1)
+        headerLabel.textColor = UIColor.lightGray
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(headerLabel)
+        
+        headerLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
+        headerLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        
+        return headerView
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension EpisodesView: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        data.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        data[section + 1]?.count ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let item = data[indexPath.section + 1]
+        cell.backgroundColor = UIColor(named: "labelBG")?.withAlphaComponent(0.7)
+        cell.textLabel?.text = item?[indexPath.row].name
+        cell.selectionStyle = .none
+        cell.textLabel?.font = UIFont(name: "WubbaLubbaDubDubRegular", size: 26)
+        cell.textLabel?.numberOfLines = 0
+        cell.textLabel?.textAlignment = .center
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailViewController = EpisodesDetailsViewController()
+        let item = data[indexPath.section + 1]
+        detailViewController.setEpisode(data: item?[indexPath.row])
+        delegate?.openModalScreen(item: detailViewController)
+    }
+}
+
 

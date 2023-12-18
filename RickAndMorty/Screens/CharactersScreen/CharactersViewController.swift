@@ -20,7 +20,7 @@ class CharactersViewController: UIViewController {
             static let interitemSpacing = 4.0
         }
         enum API {
-            static let delay = 0.5
+            static let delay = 0.2
         }
         enum Indicator {
             static let height = 50.0
@@ -39,8 +39,8 @@ class CharactersViewController: UIViewController {
 
     private var data: [Character] = []
     private var workItem: DispatchWorkItem?
-    var apiManager = APIManager()
-    var page = 1
+    private var apiManager = APIManager()
+    private var page = 1
 
     // MARK: - Subviews
 
@@ -49,7 +49,7 @@ class CharactersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.identifier)
+        collectionView.register(CharactersCollectionCell.self, forCellWithReuseIdentifier: CharactersCollectionCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,34 +109,58 @@ class CharactersViewController: UIViewController {
     private func getImages(characters: [NetworkingCharacter]) {
         var fetchedImagesCount = 0
         var newCharacters: [Character] = []
+        
         for character in characters {
             self.apiManager.getImage(characterImage: character.image) { [weak self] imageData in
                 guard let self = self else { return }
-                fetchedImagesCount += 1
-
-                let newCharacter = Character(
-                    id: character.id,
-                    name: character.name,
-                    status: character.status,
-                    species: character.species,
-                    type: character.type,
-                    gender: character.gender,
-                    origin: character.origin,
-                    location: character.location,
-                    image: UIImage(data: imageData),
-                    episode: character.episode,
-                    url: character.url,
-                    created: character.created
-                )
-                newCharacters.append(newCharacter)
-
-                if fetchedImagesCount == characters.count {
-                    self.data.append(contentsOf: newCharacters)
-                    self.data = self.data.sorted { $0.id < $1.id }
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        self.stopIndicator()
+                self.getEpisodesForCharacter(character: character) { episodes in
+                    fetchedImagesCount += 1
+                    let newCharacter = Character(
+                        id: character.id,
+                        name: character.name,
+                        status: character.status,
+                        species: character.species,
+                        type: character.type,
+                        gender: character.gender,
+                        origin: character.origin,
+                        location: character.location,
+                        image: UIImage(data: imageData),
+                        episode: episodes,
+                        url: character.url,
+                        created: character.created
+                    )
+                    newCharacters.append(newCharacter)
+                    
+                    if fetchedImagesCount == characters.count {
+                        self.data.append(contentsOf: newCharacters)
+                        self.data = self.data.sorted { $0.id < $1.id }
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                            self.stopIndicator()
+                        }
                     }
+                }
+            }
+        }
+    }
+
+    private func getEpisodesForCharacter(character: NetworkingCharacter, completion: @escaping ([Episode]) -> Void) {
+        var episodes: [Episode] = []
+        
+        for episodeURL in character.episode {
+            self.apiManager.getEpisode(url: episodeURL) { episode in
+                let newEpisode = Episode(
+                    id: episode.id,
+                    name: episode.name,
+                    airDate: episode.airDate,
+                    episode: episode.episode,
+                    characters: episode.characters,
+                    url: episode.url,
+                    created: episode.created
+                )
+                episodes.append(newEpisode)
+                if episodes.count == character.episode.count {
+                    completion(episodes)
                 }
             }
         }
@@ -156,6 +180,7 @@ class CharactersViewController: UIViewController {
         navigationItem.standardAppearance = navigationBarAppearance
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.prefersLargeTitles = false
         
         [collectionView, activityIndicatorView].forEach() {
             view.addSubview($0)
@@ -194,9 +219,9 @@ extension CharactersViewController: UICollectionViewDataSource {
         switch section {
         case .main:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CollectionCell.identifier,
+                withReuseIdentifier: CharactersCollectionCell.identifier,
                 for: indexPath
-            ) as? CollectionCell else { return UICollectionViewCell() }
+            ) as? CharactersCollectionCell else { return UICollectionViewCell() }
 
             cell.configure(image: data[indexPath.item].image, name: data[indexPath.item].name)
 
@@ -230,6 +255,12 @@ extension CharactersViewController: UICollectionViewDelegateFlowLayout {
             getCharacters(page: page)
             page += 1
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailViewController = CharactersDetailsViewController()
+        detailViewController.setCharacter(data: data[indexPath.row])
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 

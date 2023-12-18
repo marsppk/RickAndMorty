@@ -4,6 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>get_schwifty.ttf</string>
+		<string>TheSadTrainRegular.ttf</string>
 		<string>WubbaLubbaDubDub.ttf</string>
 		<string>Walt.ttf</string>
 	</array>

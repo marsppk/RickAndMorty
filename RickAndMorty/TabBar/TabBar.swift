@@ -15,14 +15,14 @@ final class TabBarController: UITabBarController {
         "Characters",
         "Episodes",
         "Locations",
-        "Settings"
+        //"Settings"
     ]
     
     let images = [
         UIImage(named: "rick")?.withRenderingMode(.alwaysOriginal),
         UIImage(named: "clapper")?.withRenderingMode(.alwaysOriginal),
         UIImage(named: "flag")?.withRenderingMode(.alwaysOriginal),
-        UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
+        //UIImage(named: "settings")?.withRenderingMode(.alwaysOriginal)
     ]
     
     // MARK: - Lifecycle
@@ -48,7 +48,7 @@ final class TabBarController: UITabBarController {
             UINavigationController(rootViewController: CharactersViewController()),
             UINavigationController(rootViewController: EpisodesViewController()),
             UINavigationController(rootViewController: LocationsViewController()),
-            UINavigationController(rootViewController: SettingsViewController())
+            //UINavigationController(rootViewController: SettingsViewController())
         ]
         
         for i in 0..<titles.count {

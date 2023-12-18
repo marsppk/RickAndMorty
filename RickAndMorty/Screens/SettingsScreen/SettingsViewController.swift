@@ -26,6 +26,7 @@ class SettingsViewController: UIViewController {
         navigationItem.standardAppearance = navigationBarAppearance
         navigationItem.compactAppearance = navigationBarAppearance
         navigationItem.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 
 }

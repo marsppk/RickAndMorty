@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CollectionCell: UICollectionViewCell {
+final class CharactersCollectionCell: UICollectionViewCell {
 
     // MARK: Constant
 
@@ -38,7 +38,7 @@ final class CollectionCell: UICollectionViewCell {
 
     // MARK: - Identifier
 
-    static let identifier = "CollectionCell"
+    static let identifier = "CharactersCollectionCell"
 
     // MARK: - Subviews
 
